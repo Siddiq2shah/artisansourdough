@@ -25,7 +25,7 @@ function WholesalePage() {
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+    formData.append("access_key", "64475009-7d25-4519-88f0-0e543662a718");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
