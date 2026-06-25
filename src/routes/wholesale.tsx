@@ -1,3 +1,5 @@
+// Force Lovable Redeploy June 2026
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/PageHero";
 
@@ -16,6 +18,35 @@ export const Route = createFileRoute("/wholesale")({
 });
 
 function WholesalePage() {
+  const [result, setResult] = React.useState("");
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResult("Sending....");
+
+    const formData = new FormData(event.currentTarget);
+
+    // Explicitly inject the access key so the payload always includes it.
+    formData.append("access_key", "64475009-7d25-4519-88f0-0e543662a718");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully!");
+        (event.target as HTMLFormElement).reset();
+      } else {
+        setResult("API Error: " + data.message);
+      }
+    } catch (error) {
+      setResult("Network error. Please try again.");
+    }
+  };
 
   return (
     <>
@@ -65,12 +96,10 @@ function WholesalePage() {
           </div>
 
           <form
-            action="https://api.web3forms.com/submit"
-            method="POST"
+            onSubmit={onSubmit}
+            noValidate
             className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10"
           >
-            <input type="hidden" name="access_key" value="64475009-7d25-4519-88f0-0e543662a718" />
-            <input type="hidden" name="redirect" value="https://artisansourdough.lovable.app" />
             <Field name="bakery" label="Bakery name" />
             <Field name="contact" label="Contact person" />
             <div className="grid gap-5 sm:grid-cols-2">
@@ -81,6 +110,7 @@ function WholesalePage() {
             <button type="submit" className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10">
               Send inquiry
             </button>
+            {result && <p className="mt-4 text-sm font-semibold text-[color:var(--brown-deep)]">{result}</p>}
           </form>
         </div>
       </section>
