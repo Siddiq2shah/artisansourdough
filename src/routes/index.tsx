@@ -84,38 +84,32 @@ const wholesaleBenefits = [
 
 function Home() {
   const [isSending, setIsSending] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSending(true);
-    setSent(false);
+    setIsSuccess(false);
 
     const formData = new FormData(e.currentTarget);
     formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
 
-    const object = Object.fromEntries(formData);
-    const json = JSON.stringify(object);
-
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: json,
+        body: formData,
       });
 
-      const result = await response.json();
-      if (result.success) {
-        setSent(true);
+      const data = await response.json();
+
+      if (data.success) {
+        setIsSuccess(true);
         e.currentTarget.reset();
       } else {
-        console.log(result);
+        alert("Error: " + data.message);
       }
     } catch (error) {
-      console.log(error);
+      alert("Something went wrong. Please try again.");
     } finally {
       setIsSending(false);
     }
@@ -399,9 +393,9 @@ function Home() {
               disabled={isSending}
               className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-10"
             >
-              {isSending ? "Sending..." : "Send message"}
+              {isSending ? "Sending..." : "Send Inquiry"}
             </button>
-            {sent && (
+            {isSuccess && (
               <p className="text-sm text-[color:var(--accent)]">
                 Thank you! Your inquiry has been sent successfully.
               </p>
