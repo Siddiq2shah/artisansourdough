@@ -340,7 +340,7 @@ function Home() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              alert("Form submit triggered! Sending data now...");
+              alert("FOUND IT! Active form triggered.");
 
               const formData = new FormData(e.currentTarget);
               formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
@@ -351,15 +351,14 @@ function Home() {
                   body: formData,
                 });
                 const data = await res.json();
-
                 if (data.success) {
-                  alert("API Success! Web3Forms accepted the message.");
+                  alert("Web3Forms received the email successfully!");
                   e.currentTarget.reset();
                 } else {
-                  alert("API Rejected it: " + data.message);
+                  alert("API Error: " + data.message);
                 }
               } catch (err) {
-                alert("Network Error: Could not reach the API server. " + err.message);
+                alert("Network Error: " + err.message);
               }
             }}
             noValidate
