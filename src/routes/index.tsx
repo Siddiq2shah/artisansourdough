@@ -86,29 +86,36 @@ function Home() {
   const [isSending, setIsSending] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSending(true);
     setSent(false);
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: json,
       });
 
-      if (!response.ok) {
-        throw new Error("Web3Forms submission failed");
+      const result = await response.json();
+      if (result.success) {
+        setSent(true);
+        e.currentTarget.reset();
+      } else {
+        console.log(result);
       }
-
-      setSent(true);
-      form.reset();
     } catch (error) {
-      console.error(error);
-      setSent(false);
+      console.log(error);
     } finally {
       setIsSending(false);
     }
@@ -368,7 +375,7 @@ function Home() {
             </div>
           </div>
 
-          <form onSubmit={onSubmit} noValidate className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10">
+          <form onSubmit={handleSubmit} noValidate className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10">
             <input type="hidden" name="access_key" value="caf949d1-9cb8-4435-a1ef-0260656fdcb8" />
             <h2 className="font-display text-3xl text-[color:var(--brown-deep)]">Send a message</h2>
             <label className="block">
