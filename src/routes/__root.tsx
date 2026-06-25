@@ -82,11 +82,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Wild Rise Sourdough — Naturally Fermented Artisan Bread" },
       { name: "description", content: "Handcrafted, slow-fermented artisan sourdough for cafés, markets, and specialty grocers." },
       { name: "author", content: "Wild Rise Sourdough" },
-      { property: "og:title", content: "Wild Rise Sourdough" },
-      { property: "og:description", content: "Handcrafted, slow-fermented artisan sourdough." },
+      { property: "og:title", content: "Wild Rise Sourdough — Naturally Fermented Artisan Bread" },
+      { property: "og:description", content: "Handcrafted, slow-fermented artisan sourdough for cafés, markets, and specialty grocers." },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Wild Rise Sourdough" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Wild Rise Sourdough — Naturally Fermented Artisan Bread" },
+      { name: "twitter:description", content: "Handcrafted, slow-fermented artisan sourdough for cafés, markets, and specialty grocers." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8a28860b-33ef-4620-ac92-e4afb652376b/id-preview-776243cf--48fc8b81-915a-4554-af59-3b9d47474f42.lovable.app-1782359164615.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8a28860b-33ef-4620-ac92-e4afb652376b/id-preview-776243cf--48fc8b81-915a-4554-af59-3b9d47474f42.lovable.app-1782359164615.png" },
     ],
     links: [
       {
