@@ -92,7 +92,33 @@ function WholesalePage() {
             </dl>
           </div>
 
-          <form onSubmit={onSubmit} noValidate className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              alert("WE FOUND IT! wholesale.tsx form triggered.");
+
+              const formData = new FormData(e.currentTarget);
+              formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+
+              try {
+                const res = await fetch("https://api.web3forms.com/submit", {
+                  method: "POST",
+                  body: formData,
+                });
+                const data = await res.json();
+                if (data.success) {
+                  alert("Web3Forms successfully received the email from Wholesale!");
+                  e.currentTarget.reset();
+                } else {
+                  alert("API Error: " + data.message);
+                }
+              } catch (err) {
+                alert("Network Error: " + err.message);
+              }
+            }}
+            noValidate
+            className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10"
+          >
             <Field name="bakery" label="Bakery name" error={errors.bakery} />
             <Field name="contact" label="Contact person" error={errors.contact} />
             <div className="grid gap-5 sm:grid-cols-2">
@@ -103,9 +129,6 @@ function WholesalePage() {
             <button type="submit" className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10">
               Send inquiry
             </button>
-            {status === "sent" && (
-              <p className="text-sm text-[color:var(--accent)]">Thank you — we'll be in touch shortly.</p>
-            )}
           </form>
         </div>
       </section>
