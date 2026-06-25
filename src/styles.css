@@ -62,26 +62,35 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --radius: 0.25rem;
+  /* Wild Rise palette: cream, wheat, dark brown */
+  --background: oklch(0.975 0.012 80);      /* cream */
+  --foreground: oklch(0.22 0.02 50);         /* near black warm */
+  --card: oklch(0.985 0.008 85);
+  --card-foreground: oklch(0.22 0.02 50);
+  --popover: oklch(0.985 0.008 85);
+  --popover-foreground: oklch(0.22 0.02 50);
+  --primary: oklch(0.32 0.04 45);            /* dark brown */
+  --primary-foreground: oklch(0.975 0.012 80);
+  --secondary: oklch(0.88 0.04 75);          /* wheat */
+  --secondary-foreground: oklch(0.28 0.04 45);
+  --muted: oklch(0.93 0.018 78);
+  --muted-foreground: oklch(0.45 0.03 55);
+  --accent: oklch(0.7 0.09 55);              /* warm caramel */
+  --accent-foreground: oklch(0.98 0.012 80);
+  --destructive: oklch(0.55 0.18 30);
+  --destructive-foreground: oklch(0.98 0.012 80);
+  --border: oklch(0.86 0.022 75);
+  --input: oklch(0.9 0.02 78);
+  --ring: oklch(0.5 0.06 50);
+  --cream: oklch(0.975 0.012 80);
+  --cream-deep: oklch(0.94 0.022 78);
+  --wheat: oklch(0.83 0.06 75);
+  --brown-deep: oklch(0.25 0.035 45);
+  --brown-soft: oklch(0.45 0.05 50);
+  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --shadow-soft: 0 1px 2px oklch(0.25 0.035 45 / 0.06), 0 8px 30px oklch(0.25 0.035 45 / 0.08);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +149,41 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-body);
+    font-feature-settings: "ss01", "ss02";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+    color: var(--brown-soft);
+  }
+
+  .rule {
+    display: inline-block;
+    height: 1px;
+    width: 2.5rem;
+    background: var(--brown-soft);
+    vertical-align: middle;
+    margin: 0 0.75rem;
   }
 }
+
+@keyframes wr-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.wr-rise { animation: wr-rise 0.9s ease-out both; }
+.wr-rise-2 { animation: wr-rise 0.9s 0.15s ease-out both; }
+.wr-rise-3 { animation: wr-rise 0.9s 0.3s ease-out both; }
+
+html { scroll-behavior: smooth; }
