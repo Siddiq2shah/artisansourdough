@@ -22,25 +22,28 @@ function WholesalePage() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setResult("Sending....");
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
 
+    const formData = new FormData(event.target as HTMLFormElement);
     formData.append("access_key", "64475009-7d25-4519-88f0-0e543662a718");
+
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
-          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Accept": "application/json",
         },
-        body: formData,
+        body: json,
       });
 
       const data = await response.json();
 
       if (data.success) {
         setResult("Form Submitted Successfully");
-        form.reset();
+        (event.target as HTMLFormElement).reset();
       } else {
         setResult("Error: " + data.message);
       }
