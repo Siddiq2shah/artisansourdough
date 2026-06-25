@@ -93,7 +93,6 @@ function Home() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -379,6 +378,10 @@ function Home() {
             <label className="block">
               <span className="eyebrow">Email</span>
               <input name="email" type="email" required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
+            </label>
+            <label className="block">
+              <span className="eyebrow">Phone</span>
+              <input name="phone" type="tel" className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
             </label>
             <label className="block">
               <span className="eyebrow">Message</span>
