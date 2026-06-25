@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FormEvent, useState } from "react";
 import { Instagram, Mail, MapPin } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import hero from "@/assets/hero-sourdough.jpg";
@@ -83,37 +82,6 @@ const wholesaleBenefits = [
 ] as const;
 
 function Home() {
-  const [isSending, setIsSending] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSending(true);
-    setIsSuccess(false);
-
-    const formData = new FormData(e.currentTarget);
-    formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setIsSuccess(true);
-        e.currentTarget.reset();
-      } else {
-        alert("Error: " + data.message);
-      }
-    } catch (error) {
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setIsSending(false);
-    }
-  };
 
   return (
     <>
@@ -369,7 +337,34 @@ function Home() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} noValidate className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              alert("Form submit triggered! Sending data now...");
+
+              const formData = new FormData(e.currentTarget);
+              formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+
+              try {
+                const res = await fetch("https://api.web3forms.com/submit", {
+                  method: "POST",
+                  body: formData,
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                  alert("API Success! Web3Forms accepted the message.");
+                  e.currentTarget.reset();
+                } else {
+                  alert("API Rejected it: " + data.message);
+                }
+              } catch (err) {
+                alert("Network Error: Could not reach the API server. " + err.message);
+              }
+            }}
+            noValidate
+            className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10"
+          >
             <input type="hidden" name="access_key" value="caf949d1-9cb8-4435-a1ef-0260656fdcb8" />
             <h2 className="font-display text-3xl text-[color:var(--brown-deep)]">Send a message</h2>
             <label className="block">
@@ -390,16 +385,10 @@ function Home() {
             </label>
             <button
               type="submit"
-              disabled={isSending}
-              className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-10"
+              className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10"
             >
-              {isSending ? "Sending..." : "Send Inquiry"}
+              Send Inquiry
             </button>
-            {isSuccess && (
-              <p className="text-sm text-[color:var(--accent)]">
-                Thank you! Your inquiry has been sent successfully.
-              </p>
-            )}
           </form>
         </div>
       </section>
