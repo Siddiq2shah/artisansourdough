@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Instagram, Mail, MapPin } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import hero from "@/assets/hero-sourdough.jpg";
@@ -83,12 +83,36 @@ const wholesaleBenefits = [
 ] as const;
 
 function Home() {
+  const [isSending, setIsSending] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
-    e.currentTarget.reset();
+    setIsSending(true);
+    setSent(false);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Web3Forms submission failed");
+      }
+
+      setSent(true);
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      setSent(false);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -346,6 +370,7 @@ function Home() {
           </div>
 
           <form onSubmit={onSubmit} noValidate className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10">
+            <input type="hidden" name="access_key" value="caf949d1-9cb8-4435-a1ef-0260656fdcb8" />
             <h2 className="font-display text-3xl text-[color:var(--brown-deep)]">Send a message</h2>
             <label className="block">
               <span className="eyebrow">Your name</span>
@@ -359,10 +384,18 @@ function Home() {
               <span className="eyebrow">Message</span>
               <textarea name="message" rows={5} required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
             </label>
-            <button type="submit" className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10">
-              Send message
+            <button
+              type="submit"
+              disabled={isSending}
+              className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-10"
+            >
+              {isSending ? "Sending..." : "Send message"}
             </button>
-            {sent && <p className="text-sm text-[color:var(--accent)]">Thank you — your note is on its way.</p>}
+            {sent && (
+              <p className="text-sm text-[color:var(--accent)]">
+                Thank you! Your inquiry has been sent successfully.
+              </p>
+            )}
           </form>
         </div>
       </section>
