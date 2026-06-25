@@ -98,7 +98,6 @@ function WholesalePage() {
               alert("Sending inquiry...");
 
               const formData = new FormData(e.currentTarget);
-              formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8".trim());
 
               try {
                 const res = await fetch("https://api.web3forms.com/submit", {
@@ -107,7 +106,7 @@ function WholesalePage() {
                 });
                 const data = await res.json();
                 if (data.success) {
-                  alert("Web3Forms successfully received the email from Wholesale!");
+                  alert("Web3Forms successfully received the email!");
                   e.currentTarget.reset();
                 } else {
                   alert("API Error: " + data.message);
@@ -119,6 +118,7 @@ function WholesalePage() {
             noValidate
             className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10"
           >
+            <input type="hidden" name="access_key" value="caf949d1-9cb8-4435-a1ef-0260656fdcb8" />
             <Field name="bakery" label="Bakery name" error={errors.bakery} />
             <Field name="contact" label="Contact person" error={errors.contact} />
             <div className="grid gap-5 sm:grid-cols-2">
