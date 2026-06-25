@@ -26,10 +26,9 @@ function Home() {
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 pt-10 pb-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:pt-16 lg:pb-32">
           <div className="flex flex-col justify-center lg:col-span-6">
-            <span className="eyebrow wr-rise"><span className="rule" />Est. small-batch bakery</span>
+            <span className="eyebrow wr-rise"><span className="rule" />IT WORKS!</span>
             <h1 className="wr-rise mt-6 font-display text-5xl leading-[1.05] text-[color:var(--brown-deep)] sm:text-6xl lg:text-7xl">
-              Naturally Fermented<br />
-              <em className="not-italic text-[color:var(--accent)]">Artisan Sourdough</em>
+              Testing the Live AI Connection!<br />
             </h1>
             <p className="wr-rise-2 mt-7 max-w-lg text-lg leading-relaxed text-[color:var(--brown-soft)]">
               Handcrafted through a slow fermentation process to create exceptional flavor,
