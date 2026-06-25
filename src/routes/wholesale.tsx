@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
-import { z } from "zod";
 
 export const Route = createFileRoute("/wholesale")({
   head: () => ({
@@ -17,32 +16,37 @@ export const Route = createFileRoute("/wholesale")({
   component: WholesalePage,
 });
 
-const schema = z.object({
-  bakery: z.string().trim().min(1, "Required").max(120),
-  contact: z.string().trim().min(1, "Required").max(120),
-  email: z.string().trim().email("Valid email required").max(255),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
-  message: z.string().trim().max(1500).optional().or(z.literal("")),
-});
-
 function WholesalePage() {
-  const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [result, setResult] = useState("");
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const result = schema.safeParse(Object.fromEntries(fd));
-    if (!result.success) {
-      const map: Record<string, string> = {};
-      result.error.issues.forEach((i) => (map[String(i.path[0])] = i.message));
-      setErrors(map);
-      setStatus("error");
-      return;
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResult("Sending....");
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        form.reset();
+      } else {
+        setResult("Error: " + data.message);
+      }
+    } catch (error) {
+      setResult("Something went wrong. Please try again.");
     }
-    setErrors({});
-    setStatus("sent");
-    e.currentTarget.reset();
   };
 
   return (
@@ -93,42 +97,21 @@ function WholesalePage() {
           </div>
 
           <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              alert("Sending inquiry...");
-
-              const formData = new FormData(e.currentTarget);
-
-              try {
-                const res = await fetch("https://api.web3forms.com/submit", {
-                  method: "POST",
-                  body: formData,
-                });
-                const data = await res.json();
-                if (data.success) {
-                  alert("Web3Forms successfully received the email!");
-                  e.currentTarget.reset();
-                } else {
-                  alert("API Error: " + data.message);
-                }
-              } catch (err) {
-                alert("Network Error: " + err.message);
-              }
-            }}
+            onSubmit={onSubmit}
             noValidate
             className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10"
           >
-            <input type="hidden" name="access_key" value="caf949d1-9cb8-4435-a1ef-0260656fdcb8" />
-            <Field name="bakery" label="Bakery name" error={errors.bakery} />
-            <Field name="contact" label="Contact person" error={errors.contact} />
+            <Field name="bakery" label="Bakery name" />
+            <Field name="contact" label="Contact person" />
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field name="email" label="Email" type="email" error={errors.email} />
-              <Field name="phone" label="Phone (optional)" type="tel" error={errors.phone} />
+              <Field name="email" label="Email" type="email" />
+              <Field name="phone" label="Phone (optional)" type="tel" />
             </div>
-            <Field name="message" label="Message" textarea error={errors.message} />
+            <Field name="message" label="Message" textarea />
             <button type="submit" className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10">
               Send inquiry
             </button>
+            <span className="mt-2 block text-sm">{result}</span>
           </form>
         </div>
       </section>
