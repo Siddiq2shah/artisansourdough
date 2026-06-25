@@ -95,10 +95,10 @@ function WholesalePage() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              alert("WE FOUND IT! wholesale.tsx form triggered.");
+              alert("Sending inquiry...");
 
               const formData = new FormData(e.currentTarget);
-              formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
+              formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8".trim());
 
               try {
                 const res = await fetch("https://api.web3forms.com/submit", {
