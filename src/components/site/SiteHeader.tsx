@@ -4,8 +4,8 @@ import { Menu, X } from "lucide-react";
 
 const nav = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/products", label: "Products" },
+  { href: "/#about", label: "About" },
+  { href: "/#products", label: "Products" },
   { to: "/wholesale", label: "Wholesale" },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
@@ -39,16 +39,26 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-9 md:flex">
-          {nav.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="text-sm tracking-wide text-[color:var(--brown-deep)] transition-colors hover:text-[color:var(--accent)] [&.active]:text-[color:var(--accent)]"
-              activeOptions={{ exact: item.to === "/" }}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {nav.map((item) =>
+            "href" in item ? (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-sm tracking-wide text-[color:var(--brown-deep)] transition-colors hover:text-[color:var(--accent)]"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="text-sm tracking-wide text-[color:var(--brown-deep)] transition-colors hover:text-[color:var(--accent)] [&.active]:text-[color:var(--accent)]"
+                activeOptions={{ exact: item.to === "/" }}
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
         </nav>
 
         <Link
@@ -70,16 +80,27 @@ export function SiteHeader() {
       {open && (
         <div className="md:hidden border-t border-border bg-[color:var(--cream)]">
           <nav className="flex flex-col px-6 py-4">
-            {nav.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className="py-3 text-sm tracking-wide text-[color:var(--brown-deep)]"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {nav.map((item) =>
+              "href" in item ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="py-3 text-sm tracking-wide text-[color:var(--brown-deep)]"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="py-3 text-sm tracking-wide text-[color:var(--brown-deep)]"
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </nav>
         </div>
       )}

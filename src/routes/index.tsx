@@ -1,9 +1,18 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Instagram, Mail, MapPin } from "lucide-react";
+import { PageHero } from "@/components/site/PageHero";
 import hero from "@/assets/hero-sourdough.jpg";
 import country from "@/assets/product-country.jpg";
 import wheat from "@/assets/product-wheat.jpg";
 import seeded from "@/assets/product-seeded.jpg";
 import hands from "@/assets/gallery-hands.jpg";
+import baker from "@/assets/about-baker.jpg";
+import starter from "@/assets/gallery-starter.jpg";
+import crust from "@/assets/gallery-crust.jpg";
+import crumb from "@/assets/gallery-crumb.jpg";
+import cooling from "@/assets/gallery-cooling.jpg";
+import sliced from "@/assets/gallery-sliced.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,10 +28,73 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+const products = [
+  {
+    img: country,
+    name: "Classic Country Sourdough",
+    tagline: "Our cornerstone loaf — a fine first bread for anyone new to real sourdough.",
+    ingredients: "Heritage white flour, water, sea salt, wild yeast starter.",
+    fermentation: "24 hours, cold retard",
+    serving: "Toasted with cultured butter, used as a soup companion, or torn into salad croutons.",
+  },
+  {
+    img: wheat,
+    name: "Whole Wheat Sourdough",
+    tagline: "Nutty, deeply flavored, with a tight crumb and a honeyed finish.",
+    ingredients: "Stone-milled heritage whole wheat, white flour, water, sea salt, wild yeast starter.",
+    fermentation: "30 hours, cold retard",
+    serving: "Smashed avocado and chili oil, cured salmon and crème fraîche, or raw honey and ricotta.",
+  },
+  {
+    img: seeded,
+    name: "Seeded Sourdough",
+    tagline: "Toasted sesame, flax, and sunflower folded through a wheat-and-rye crumb.",
+    ingredients: "Heritage white flour, rye, water, sea salt, sesame, flax, sunflower, wild yeast starter.",
+    fermentation: "36 hours, cold retard",
+    serving: "Sharp cheddar and pickles, a winter stew, or thin slices with butter.",
+  },
+] as const;
+
+const galleryImages = [
+  { src: crust, alt: "Macro photograph of blistered sourdough crust", span: "row-span-2" },
+  { src: hands, alt: "Baker's hands shaping dough", span: "" },
+  { src: country, alt: "Classic country sourdough boule", span: "" },
+  { src: crumb, alt: "Open crumb cross-section of sourdough", span: "" },
+  { src: cooling, alt: "Loaves cooling on a wire rack", span: "row-span-2" },
+  { src: starter, alt: "Sourdough starter in a glass jar", span: "" },
+  { src: hero, alt: "Hand-scored sourdough boule on a wooden board", span: "row-span-2" },
+  { src: sliced, alt: "Sliced sourdough with butter and honey", span: "" },
+  { src: seeded, alt: "Seeded sourdough loaf on linen", span: "" },
+] as const;
+
+const wholesaleBenefits = [
+  {
+    title: "Consistent quality",
+    description: "Every loaf is shaped, scored, and baked the same way — week after week, year after year.",
+  },
+  {
+    title: "Flexible ordering",
+    description: "Standing weekly orders or rotating selections. Adjust the night before and we bake to match.",
+  },
+  {
+    title: "Samples on us",
+    description: "Try the breads before you commit. We send a sample box to qualified accounts at no charge.",
+  },
+] as const;
+
 function Home() {
+  const [sent, setSent] = useState(false);
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSent(true);
+    e.currentTarget.reset();
+  };
+
   return (
     <>
-      {/* HERO */}
+      <div id="top" />
+
       <section className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 pt-10 pb-20 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:pt-16 lg:pb-32">
           <div className="flex flex-col justify-center lg:col-span-6">
@@ -35,18 +107,18 @@ function Home() {
               an open crumb, and a crust worth the wait.
             </p>
             <div className="wr-rise-3 mt-10 flex flex-wrap items-center gap-4">
-              <Link
-                to="/wholesale"
+              <a
+                href="#wholesale"
                 className="rounded-full bg-[color:var(--brown-deep)] px-8 py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)]"
               >
                 Request a Sample
-              </Link>
-              <Link
-                to="/contact"
+              </a>
+              <a
+                href="#contact"
                 className="rounded-full border border-[color:var(--brown-deep)] px-8 py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--brown-deep)] transition-colors hover:bg-[color:var(--brown-deep)] hover:text-[color:var(--cream)]"
               >
                 Contact Us
-              </Link>
+              </a>
             </div>
 
             <div className="mt-16 grid grid-cols-3 gap-6 border-t border-border pt-8">
@@ -81,7 +153,6 @@ function Home() {
         </div>
       </section>
 
-      {/* PHILOSOPHY STRIP */}
       <section className="border-y border-border bg-[color:var(--cream-deep)] py-20">
         <div className="mx-auto max-w-4xl px-6 text-center lg:px-10">
           <span className="eyebrow"><span className="rule" />Our philosophy<span className="rule" /></span>
@@ -93,87 +164,206 @@ function Home() {
         </div>
       </section>
 
-      {/* PRODUCTS PREVIEW */}
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <span className="eyebrow"><span className="rule" />The breads</span>
-              <h2 className="mt-4 font-display text-4xl text-[color:var(--brown-deep)] sm:text-5xl">
-                Three loaves. Endless tables.
-              </h2>
-            </div>
-            <Link to="/products" className="text-sm uppercase tracking-[0.2em] text-[color:var(--brown-deep)] underline underline-offset-8 hover:text-[color:var(--accent)]">
-              See all breads
-            </Link>
-          </div>
+      <section id="about" className="py-24">
+        <PageHero
+          eyebrow="Our story"
+          title={<>Eleven years of <em className="not-italic text-[color:var(--accent)]">listening to dough.</em></>}
+        >
+          Wild Rise is the work of one baker who couldn't leave a loaf alone — and the small
+          team that grew up around her bench.
+        </PageHero>
 
+        <div className="mx-auto grid max-w-6xl gap-16 px-6 lg:grid-cols-12 lg:px-10">
+          <div className="lg:col-span-5">
+            <div className="aspect-[4/5] overflow-hidden rounded-sm">
+              <img
+                src={baker}
+                alt="Baker shaping a sourdough boule"
+                loading="lazy"
+                width={1280}
+                height={1600}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+          <div className="space-y-6 text-[color:var(--brown-soft)] lg:col-span-7">
+            <span className="eyebrow"><span className="rule" />Elena Marsh, founder</span>
+            <h2 className="font-display text-4xl text-[color:var(--brown-deep)]">The first jar</h2>
+            <p>
+              It began on a windowsill in 2014 — a jar of flour and water that, against all
+              expectation, came alive. Elena had spent a decade in restaurant kitchens, but
+              the loaf she pulled from her oven that first weekend changed the trajectory of
+              everything that followed.
+            </p>
+            <p>
+              For the next four years she baked from her home, refining a single recipe
+              through hundreds of failures: hydrations that wouldn't hold, crumbs that closed
+              up, crusts that wouldn't sing. She kept notes by hand. She fed the starter at
+              the same hours her grandmother had fed her chickens.
+            </p>
+            <h3 className="pt-6 font-display text-3xl text-[color:var(--brown-deep)]">Patience as a method</h3>
+            <p>
+              Wild Rise opened in 2019 with three breads and one unwavering rule:
+              <em> never rush a loaf.</em> We mix in the afternoon and let the dough rest
+              overnight in a cold retard, sometimes for thirty-six hours, sometimes more. It
+              is slower than is sensible. It is also why our bread tastes the way it does.
+            </p>
+            <h3 className="pt-6 font-display text-3xl text-[color:var(--brown-deep)]">Grain that knows where it came from</h3>
+            <p>
+              We mill our whole-grain flour on a stone burr, fresh each week, from heritage
+              wheat grown within a hundred miles of the bakery. Our white flour comes from a
+              single mill that has worked with the same farms for three generations. Water,
+              flour, sea salt, wild yeast. Nothing more.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="products" className="py-24">
+        <PageHero
+          eyebrow="The breads"
+          title={<>Three loaves, baked <em className="not-italic text-[color:var(--accent)]">every day.</em></>}
+        >
+          Each bread is shaped by hand and given the time it asks for. Pulled from the oven
+          in the morning, on shelves before noon.
+        </PageHero>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="mt-14 grid gap-10 md:grid-cols-3">
-            {[
-              { img: country, name: "Classic Country", note: "Open crumb · 36-hour" },
-              { img: wheat, name: "Whole Wheat", note: "Nutty · 100% stone-milled" },
-              { img: seeded, name: "Seeded", note: "Sesame · Flax · Sunflower" },
-            ].map((p) => (
-              <Link to="/products" key={p.name} className="group block">
-                <div className="aspect-[4/5] overflow-hidden rounded-sm bg-[color:var(--cream-deep)]">
+            {products.map((product) => (
+              <article key={product.name} className="group">
+                <div className="aspect-[4/5] overflow-hidden rounded-sm">
                   <img
-                    src={p.img}
-                    alt={p.name}
-                    loading="lazy"
+                    src={product.img}
+                    alt={product.name}
                     width={1024}
                     height={1024}
+                    loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="mt-5 flex items-baseline justify-between">
-                  <h3 className="font-display text-2xl text-[color:var(--brown-deep)]">{p.name}</h3>
-                  <span className="eyebrow">{p.note}</span>
+                <div className="mt-5 space-y-4">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-display text-2xl text-[color:var(--brown-deep)]">{product.name}</h3>
+                    <span className="eyebrow hidden sm:inline">{product.tagline}</span>
+                  </div>
+                  <dl className="grid gap-6 border-t border-border pt-6 text-sm text-[color:var(--brown-soft)]">
+                    <div>
+                      <dt className="eyebrow">Ingredients</dt>
+                      <dd className="mt-2">{product.ingredients}</dd>
+                    </div>
+                    <div>
+                      <dt className="eyebrow">Fermentation</dt>
+                      <dd className="mt-2">{product.fermentation}</dd>
+                    </div>
+                    <div>
+                      <dt className="eyebrow">Serve it with</dt>
+                      <dd className="mt-2">{product.serving}</dd>
+                    </div>
+                  </dl>
                 </div>
-              </Link>
+              </article>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <a href="#wholesale" className="rounded-full border border-[color:var(--brown-deep)] px-8 py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--brown-deep)] transition-colors hover:bg-[color:var(--brown-deep)] hover:text-[color:var(--cream)]">
+              Request a wholesale sample
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="wholesale" className="bg-[color:var(--brown-deep)] py-24 text-[color:var(--cream)]">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span className="eyebrow text-[color:var(--wheat)]"><span className="rule bg-[color:var(--wheat)]" />For bakeries & cafés</span>
+              <h2 className="mt-6 font-display text-4xl sm:text-5xl">Bring Wild Rise to your counter.</h2>
+              <p className="mt-5 text-[color:var(--cream)]/80">
+                Consistent quality, flexible weekly orders, and samples on us.
+              </p>
+            </div>
+            <a href="#contact" className="rounded-full border border-[color:var(--cream)] px-8 py-4 text-xs uppercase tracking-[0.22em] transition-colors hover:bg-[color:var(--cream)] hover:text-[color:var(--brown-deep)]">
+              Get in touch
+            </a>
+          </div>
+
+          <div className="mt-14 grid gap-10 md:grid-cols-3">
+            {wholesaleBenefits.map((item) => (
+              <div key={item.title} className="rounded-sm bg-[color:var(--cream)] p-8 text-[color:var(--brown-deep)] shadow-[var(--shadow-soft)]">
+                <h3 className="font-display text-2xl">{item.title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-[color:var(--brown-soft)]">{item.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* STORY BAND */}
-      <section className="py-24">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:px-10">
-          <div className="aspect-[4/5] overflow-hidden rounded-sm">
-            <img src={hands} alt="Baker shaping dough by hand" loading="lazy" width={1024} height={1280} className="h-full w-full object-cover" />
-          </div>
-          <div className="flex flex-col justify-center">
-            <span className="eyebrow"><span className="rule" />Our story</span>
-            <h2 className="mt-4 font-display text-4xl text-[color:var(--brown-deep)] sm:text-5xl">
-              A bakery built on patience.
-            </h2>
-            <p className="mt-6 text-base leading-relaxed text-[color:var(--brown-soft)]">
-              What began with a single jar of starter on a kitchen windowsill became a daily
-              practice of feeding, folding, and listening. Every loaf we send out has been
-              shaped by hand and watched, hour by hour, through its rise.
-            </p>
-            <Link to="/about" className="mt-8 self-start text-sm uppercase tracking-[0.22em] text-[color:var(--brown-deep)] underline underline-offset-8 hover:text-[color:var(--accent)]">
-              Read our story
-            </Link>
+      <section id="gallery" className="py-20">
+        <PageHero
+          eyebrow="Gallery"
+          title={<>From dough to <em className="not-italic text-[color:var(--accent)]">table.</em></>}
+        >
+          Crust, crumb, and the quiet hours between mix and oven.
+        </PageHero>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="grid auto-rows-[18rem] grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
+            {galleryImages.map((img, i) => (
+              <figure key={i} className={`group overflow-hidden rounded-sm bg-[color:var(--cream-deep)] ${img.span}`}>
+                <img src={img.src} alt={img.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              </figure>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-[color:var(--brown-deep)] py-24 text-[color:var(--cream)]">
-        <div className="mx-auto max-w-4xl px-6 text-center lg:px-10">
-          <span className="eyebrow text-[color:var(--wheat)]"><span className="rule bg-[color:var(--wheat)]" />For bakeries & cafés</span>
-          <h2 className="mt-6 font-display text-4xl sm:text-5xl">
-            Bring Wild Rise to your counter.
-          </h2>
-          <p className="mt-5 text-[color:var(--cream)]/80">
-            Consistent quality, flexible weekly orders, and samples on us.
-          </p>
-          <Link
-            to="/wholesale"
-            className="mt-10 inline-block rounded-full border border-[color:var(--cream)] px-8 py-4 text-xs uppercase tracking-[0.22em] transition-colors hover:bg-[color:var(--cream)] hover:text-[color:var(--brown-deep)]"
-          >
-            Explore wholesale
-          </Link>
+      <section id="contact" className="border-t border-border bg-[color:var(--cream-deep)] py-24">
+        <div className="mx-auto grid max-w-6xl gap-16 px-6 lg:grid-cols-12 lg:px-10">
+          <div className="space-y-10 lg:col-span-5">
+            <div>
+              <span className="eyebrow"><span className="rule" />Find us</span>
+              <h2 className="mt-4 font-display text-3xl text-[color:var(--brown-deep)]">The bakery</h2>
+              <p className="mt-3 flex items-start gap-3 text-sm text-[color:var(--brown-soft)]">
+                <MapPin size={16} className="mt-0.5" />
+                218 Mill Road<br />Hudson Valley, NY 12534
+              </p>
+              <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[color:var(--brown-soft)]">
+                Counter open Fri – Sun · 8am–2pm
+              </p>
+            </div>
+            <div>
+              <span className="eyebrow"><span className="rule" />Write</span>
+              <p className="mt-4 flex items-center gap-3 text-sm">
+                <Mail size={16} />
+                <a href="mailto:hello@wildrisebakery.com" className="text-[color:var(--brown-deep)] underline underline-offset-4 hover:text-[color:var(--accent)]">hello@wildrisebakery.com</a>
+              </p>
+              <p className="mt-3 flex items-center gap-3 text-sm">
+                <Instagram size={16} />
+                <a href="https://instagram.com/wildrisesourdough" className="text-[color:var(--brown-deep)] underline underline-offset-4 hover:text-[color:var(--accent)]">@wildrisesourdough</a>
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={onSubmit} noValidate className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10">
+            <h2 className="font-display text-3xl text-[color:var(--brown-deep)]">Send a message</h2>
+            <label className="block">
+              <span className="eyebrow">Your name</span>
+              <input name="name" required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
+            </label>
+            <label className="block">
+              <span className="eyebrow">Email</span>
+              <input name="email" type="email" required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
+            </label>
+            <label className="block">
+              <span className="eyebrow">Message</span>
+              <textarea name="message" rows={5} required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
+            </label>
+            <button type="submit" className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10">
+              Send message
+            </button>
+            {sent && <p className="text-sm text-[color:var(--accent)]">Thank you — your note is on its way.</p>}
+          </form>
         </div>
       </section>
     </>
