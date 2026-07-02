@@ -1,3 +1,4 @@
+// Force mobile cache clear update
 import { createFileRoute } from "@tanstack/react-router";
 import { Instagram, Mail, MapPin } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
@@ -82,6 +83,7 @@ const wholesaleBenefits = [
 ] as const;
 
 function Home() {
+  console.log("Homepage loaded");
 
   return (
     <>
