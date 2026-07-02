@@ -13,7 +13,6 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/site/SiteHeader";
 import { SiteFooter } from "../components/site/SiteFooter";
-import { SourdoughAgent } from "../components/ui/SourdoughAgent";
 
 function NotFoundComponent() {
   return (
@@ -137,7 +136,6 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
-        <SourdoughAgent />
       </div>
     </QueryClientProvider>
   );
