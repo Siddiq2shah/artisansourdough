@@ -18,7 +18,7 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm">
             <li><a href="/#about" className="hover:text-[color:var(--accent)]">Our story</a></li>
             <li><a href="/#products" className="hover:text-[color:var(--accent)]">Breads</a></li>
-            <li><Link to="/wholesale" className="hover:text-[color:var(--accent)]">Wholesale</Link></li>
+            <li><Link to="/contact" className="hover:text-[color:var(--accent)]">Contact</Link></li>
             <li><Link to="/gallery" className="hover:text-[color:var(--accent)]">Gallery</Link></li>
           </ul>
         </div>

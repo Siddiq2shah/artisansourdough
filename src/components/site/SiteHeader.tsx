@@ -3,11 +3,6 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const nav = [
-  { to: "/", label: "Home" },
-  { href: "/#about", label: "About" },
-  { href: "/#products", label: "Products" },
-  { to: "/wholesale", label: "Wholesale" },
-  { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -61,12 +56,6 @@ export function SiteHeader() {
           )}
         </nav>
 
-        <Link
-          to="/wholesale"
-          className="hidden rounded-full bg-[color:var(--brown-deep)] px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] md:inline-block"
-        >
-          Request a Sample
-        </Link>
 
         <button
           aria-label="Toggle menu"
