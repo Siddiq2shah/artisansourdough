@@ -1,4 +1,5 @@
 // Force mobile cache clear update
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Instagram, Mail, MapPin } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
@@ -83,7 +84,35 @@ const wholesaleBenefits = [
 ] as const;
 
 function Home() {
-  console.log("Homepage loaded");
+  const [result, setResult] = React.useState("");
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResult("Sending....");
+
+    const formData = new FormData(event.currentTarget);
+
+    // Explicitly inject the access key so the payload always includes it.
+    formData.append("access_key", "64475009-7d25-4519-88f0-0e543662a718");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully!");
+        (event.target as HTMLFormElement).reset();
+      } else {
+        setResult("API Error: " + data.message);
+      }
+    } catch (error) {
+      setResult("Network error. Please try again.");
+    }
+  };
 
   return (
     <>
@@ -340,59 +369,50 @@ function Home() {
           </div>
 
           <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              alert("FOUND IT! Active form triggered.");
-
-              const formData = new FormData(e.currentTarget);
-              formData.append("access_key", "caf949d1-9cb8-4435-a1ef-0260656fdcb8");
-
-              try {
-                const res = await fetch("https://api.web3forms.com/submit", {
-                  method: "POST",
-                  body: formData,
-                });
-                const data = await res.json();
-                if (data.success) {
-                  alert("Web3Forms received the email successfully!");
-                  e.currentTarget.reset();
-                } else {
-                  alert("API Error: " + data.message);
-                }
-              } catch (err) {
-                alert("Network Error: " + err.message);
-              }
-            }}
+            onSubmit={onSubmit}
             noValidate
             className="lg:col-span-7 space-y-5 rounded-sm bg-[color:var(--cream)] p-8 shadow-[var(--shadow-soft)] sm:p-10"
           >
-            <input type="hidden" name="access_key" value="caf949d1-9cb8-4435-a1ef-0260656fdcb8" />
             <h2 className="font-display text-3xl text-[color:var(--brown-deep)]">Send a message</h2>
-            <label className="block">
-              <span className="eyebrow">Your name</span>
-              <input name="name" required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
-            </label>
-            <label className="block">
-              <span className="eyebrow">Email</span>
-              <input name="email" type="email" required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
-            </label>
-            <label className="block">
-              <span className="eyebrow">Phone</span>
-              <input name="phone" type="tel" className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
-            </label>
-            <label className="block">
-              <span className="eyebrow">Message</span>
-              <textarea name="message" rows={5} required className="mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none" />
-            </label>
-            <button
-              type="submit"
-              className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10"
-            >
+            <Field name="name" label="Your name" />
+            <Field name="email" label="Email" type="email" />
+            <Field name="phone" label="Phone (optional)" type="tel" />
+            <Field name="message" label="Message" textarea />
+            <button type="submit" className="w-full rounded-full bg-[color:var(--brown-deep)] py-4 text-xs uppercase tracking-[0.22em] text-[color:var(--cream)] transition-colors hover:bg-[color:var(--accent)] sm:w-auto sm:px-10">
               Send Inquiry
             </button>
+            {result && <p className="mt-4 text-sm font-semibold text-[color:var(--brown-deep)]">{result}</p>}
           </form>
         </div>
       </section>
     </>
+  );
+}
+
+function Field({
+  name,
+  label,
+  type = "text",
+  textarea,
+  error,
+}: {
+  name: string;
+  label: string;
+  type?: string;
+  textarea?: boolean;
+  error?: string;
+}) {
+  const cls =
+    "mt-2 w-full rounded-sm border border-border bg-[color:var(--cream-deep)] px-4 py-3 text-sm text-[color:var(--brown-deep)] focus:border-[color:var(--brown-deep)] focus:outline-none";
+  return (
+    <label className="block">
+      <span className="eyebrow">{label}</span>
+      {textarea ? (
+        <textarea name={name} rows={5} className={cls} maxLength={1500} />
+      ) : (
+        <input name={name} type={type} className={cls} maxLength={255} />
+      )}
+      {error && <span className="mt-1 block text-xs text-destructive">{error}</span>}
+    </label>
   );
 }
